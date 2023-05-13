@@ -1,7 +1,7 @@
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { getAllPosts } from '../../../redux/postsRedux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 const AllPosts = () => {
@@ -21,7 +21,7 @@ const AllPosts = () => {
                 {post.publishedDate} <br />
               </Card.Text>
               <Card.Text>{post.shortDescription}</Card.Text>
-              <Button variant='primary' as={Link} to={'/post/' + post.id}>
+              <Button variant='primary' as={NavLink} to={'/post/'+ post.id}>
                 Read more
               </Button>
             </Card.Body>
