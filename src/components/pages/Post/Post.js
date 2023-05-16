@@ -1,14 +1,28 @@
-import { getPostById } from '../../../redux/postsRedux';
-import { useSelector } from 'react-redux';
+import { getPostById, removePost } from '../../../redux/postsRedux';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Modal  } from 'react-bootstrap';
+import { useState } from 'react';
+
 
 const Post = () => {
 
   const {postId} = useParams ();
   const postData = useSelector(state=> getPostById (state, postId));
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const dispatch = useDispatch();
+  const postDelete = (id) => {
+    dispatch(removePost(id));
+  }
+  
+  
+  
   if (!postData) return <Navigate to='/'/>;
 
     return (
@@ -33,9 +47,22 @@ const Post = () => {
           <Button variant='outline-info' as={NavLink} to={'/post/edit/' + postId}>
           Edit
           </Button>
-          <Button variant='outline-danger'>Delete</Button>
+          <Button variant='outline-danger'  onClick={handleShow}>Delete</Button>
         </Col>
       </Row>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        This operation will completely remove this post from the app. <br />{' '}
+        Are you sure you want to do that?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>Cancel</Button>
+          <Button variant='danger' onClick={()=> {handleClose(); postDelete(postData.id);}}>Remove</Button>
+        </Modal.Footer>
+      </Modal>
       </Container>
       </>
 
