@@ -17,6 +17,9 @@ const NavBar = () => {
           <Nav.Link className='py-0 me-2' as={NavLink} to='/'>
             Home
           </Nav.Link>
+          <Nav.Link className='py-0' as={NavLink} to='/category'>
+            Categories
+          </Nav.Link>
           <Nav.Link className='py-0' as={NavLink} to='/about'>
             About
           </Nav.Link>

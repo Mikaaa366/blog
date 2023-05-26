@@ -5,18 +5,24 @@ import 'react-quill/dist/quill.snow.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from "react-hook-form";
+import { useSelector } from 'react-redux';
+import { allCategories } from '../../../redux/categoriesRedux';
+
 
 
 const PostForm = ({action, actionText, ...props}) => {
-
+    const categories = useSelector(allCategories);
     const [title, setTitle] = useState(props.title || '');
     const [author, setAuthor] = useState(props.author ||'');
     const [publishedDate, setPublishedDate] = useState(props.publishedDate ||'');
     const [shortDescription, setShortDescription] = useState(props.shortDescription ||'');
     const [content, setContent] = useState(props.content ||'');
 
+    const [category, setCategory] = useState(props.category ||'' );
+
     const [dateError, setDateError] = useState(false);
     const [contentError, setContentError] = useState(false);
+
 
 
     const { register, handleSubmit: validate, formState: { errors } } = useForm();
@@ -25,7 +31,7 @@ const PostForm = ({action, actionText, ...props}) => {
       setContentError(!content)
       setDateError(!publishedDate)
       if(content && publishedDate) {
-        action({ title, author, publishedDate, shortDescription, content });
+        action({ title, author, publishedDate, shortDescription, content, category });
       }
     };
 
@@ -51,6 +57,13 @@ const PostForm = ({action, actionText, ...props}) => {
             onChange={(date) => setPublishedDate(date)}
           />
           {dateError && <small className="d-block form-text text-danger mt-2">This field is required</small>}
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Category</Form.Label>
+          <Form.Select className='mb-3 w-50' onChange={e => setCategory(e.target.value) }>
+            <option>Select category</option>
+            {categories.map((category, index)=> (<option key={index} value={category}>{category}</option>))}
+          </Form.Select>
         </Form.Group>
         <Form.Group className={'mb-3 w-50'}>
           <Form.Label>Short description</Form.Label>
